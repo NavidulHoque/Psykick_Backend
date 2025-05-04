@@ -1,5 +1,5 @@
-import { ARVTarget } from "../model/ARVTarget.model.js";
-import { TMCTarget } from "../model/TMCTarget.model.js";
+import { ARVTarget } from "../model/arvTarget.model.js";
+import { TMCTarget } from "../model/tmcTarget.model.js";
 import { startNextGameService, updateAddToQueueService, updateGameTimeService, updateMakeCompleteService, updateMakeInActiveService, updateRemoveFromQueueService } from "../services/ARVTMCServices/ARVTMCServices.js";
 import { generateCode } from "../utils/generateCode.js";
 
@@ -101,8 +101,8 @@ export const getAllQueuedARVTargets = async (req, res, next) => {
     try {
 
         const [totalItems, ARVTargets] = await Promise.all([
-            ARVTarget.countDocuments({ isQueued: true }),
-            ARVTarget.find({ isQueued: true })
+            ARVTarget.countDocuments({ isQueued: true, isActive: false, isPartiallyActive: false }),
+            ARVTarget.find({ isQueued: true, isActive: false, isPartiallyActive: false })
                 .select("-__v")
                 .skip(skip)
                 .limit(limit)
@@ -137,8 +137,8 @@ export const getAllUnQueuedARVTargets = async (req, res, next) => {
     try {
 
         const [totalItems, ARVTargets] = await Promise.all([
-            ARVTarget.countDocuments({ isQueued: false }),
-            ARVTarget.find({ isQueued: false })
+            ARVTarget.countDocuments({ isQueued: false, isActive: false, isPartiallyActive: false }),
+            ARVTarget.find({ isQueued: false, isActive: false, isPartiallyActive: false })
                 .select("-__v")
                 .skip(skip)
                 .limit(limit)
@@ -191,7 +191,7 @@ export const getActiveARVTarget = async (_, res, next) => {
 export const startNextGame = async (_, res, next) => {
 
     try {
-        await startNextGameService(ARVTarget, res, next)
+        await startNextGameService(ARVTarget, res, next, "ARV")
     }
 
     catch (error) {

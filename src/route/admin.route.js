@@ -32,7 +32,7 @@ router.get("/all-users", verifyJWT, isAdmin, getAllUsers);
 router.get("/active-users-count", verifyJWT, isAdmin, getActiveUsersCount);
 
 // Get game participation stats
-router.get("/game-graph", verifyJWT, isAdmin, getGameParticipationStats);
+router.get("/game-graph", getGameParticipationStats);
 
 // Get completed targets for a user
 router.get('/completedTargets', verifyJWT, getCompletedTargets);
@@ -47,8 +47,5 @@ router.get('/get-all-completed-targets-count', verifyJWT, isAdmin, getAllComplet
 router.get("/all-contact-us", verifyJWT, isAdmin, getAllContactUs);
 router.get("/contact-us/:id", verifyJWT, isAdmin, getContactUs);
 router.delete("/contact-us/:id", verifyJWT, isAdmin, deleteContactUs);
-
-
-
 
 export default router;

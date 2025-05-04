@@ -6,6 +6,7 @@ import { notFoundHandler } from './src/middleware/notFoundHandler.middleware.js'
 import passport from 'passport';
 import session from 'express-session';
 import cors from "cors";
+import "./src/jobs/notificationJob.js";
 
 dotenv.config();
 
@@ -33,8 +34,8 @@ app.get('/', (req, res) => {
 });
 
 // Import routes
-import userRoute from './src/route/user.route.js';
 import profileRoute from './src/route/profile.route.js';
+import userRoute from './src/route/user.route.js';
 import adminRoute from './src/route/admin.route.js'
 import categoryImageRoute from "./src/route/categoryImage.route.js"
 import privacyPolicyRoute from './src/route/privacyPolicy.route.js';
@@ -47,9 +48,11 @@ import termsCondition from "./src/route/termsCondition.route.js";
 import aboutUsRoute from "./src/route/aboutUs.route.js";
 import OAuthRoute from "./src/route/OAuth.route.js"
 import contactUsRoute from "./src/route/contactUs.route.js"
+import notificationRoute from "./src/route/notification.route.js"
 
 // set 
 app.use('/api/v1/user', userRoute);
+app.use('/api/v1/notifications', notificationRoute);
 app.use('/api/v1/profile', profileRoute);
 app.use('/api/v1/admin', adminRoute);
 app.use('/api/v1/category', categoryImageRoute);
@@ -64,10 +67,9 @@ app.use('/api/v1/about-us', aboutUsRoute);
 app.use('/api/v1', OAuthRoute);
 app.use('/api/v1', contactUsRoute);
 
-// not found route handler middleware
-app.use(notFoundHandler)
 
-//error handler middleware
+// Error handling middleware
+app.use(notFoundHandler);  
 app.use(errorHandler);
 
 // Start server

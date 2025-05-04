@@ -5,7 +5,7 @@ export const getUserProfile = async (req, res) => {
 
   try {
     const user = await User.findById(id).select(
-      "-fullName -phone -title -country -dob -password -point -tmcScore -arvScore -combinedScore -leaderboardPosition -emailVerified -role -gender -refreshToken -otpExpiration -createdAt -updatedAt -__v"
+      "-fullName -phone -sessions -title -country -dob -password -point -tmcScore -arvScore -combinedScore -leaderboardPosition -emailVerified -role -gender -refreshToken -otpExpiration -createdAt -updatedAt -__v"
     );
 
     if (!user) {
@@ -31,14 +31,6 @@ export const updateUserProfile = async (req, res) => {
   const { screenName, fullName, phoneNumber, country, dob, gender } = req.body;
 
   try {
-    // const user = await User.findById(userId);
-
-    // if (user && user._id.toString() !== userId) {
-    //   return res
-    //     .status(400)
-    //     .json({ status: false, message: "Screen name already exists" });
-    // }
-
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { screenName, fullName, phoneNumber, country, dob, gender },
@@ -95,7 +87,7 @@ export const getProfileCompleteness = async (req, res) => {
     const completedFields = fieldsToCheck.filter(field => !!profile[field]).length;
     const completeness = Math.round((completedFields / fieldsToCheck.length) * 100);
 
-    return res.status(200).json({ completeness }); 
+    return res.status(200).json({ completeness });
   } catch (error) {
     console.error('Error:', error);
     return res.status(500).json({ message: 'Server error' });

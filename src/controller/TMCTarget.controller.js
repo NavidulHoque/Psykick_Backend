@@ -1,5 +1,5 @@
-import { ARVTarget } from "../model/ARVTarget.model.js";
-import { TMCTarget } from "../model/TMCTarget.model.js";
+import { ARVTarget } from "../model/arvTarget.model.js";
+import { TMCTarget } from "../model/tmcTarget.model.js";
 import {
   startNextGameService,
   updateAddToQueueService,
@@ -104,8 +104,8 @@ export const getAllQueuedTMCTargets = async (req, res, next) => {
   try {
 
     const [totalItems, TMCTargets] = await Promise.all([
-      TMCTarget.countDocuments({ isQueued: true }),
-      TMCTarget.find({ isQueued: true })
+      TMCTarget.countDocuments({ isQueued: true, isActive: false, isPartiallyActive: false }),
+      TMCTarget.find({ isQueued: true, isActive: false, isPartiallyActive: false })
         .select("-__v")
         .skip(skip)
         .limit(limit)
@@ -140,8 +140,8 @@ export const getAllUnQueuedTMCTargets = async (req, res, next) => {
   try {
 
     const [totalItems, TMCTargets] = await Promise.all([
-      TMCTarget.countDocuments({ isQueued: false }),
-      TMCTarget.find({ isQueued: false })
+      TMCTarget.countDocuments({ isQueued: false, isActive: false, isPartiallyActive: false }),
+      TMCTarget.find({ isQueued: false, isActive: false, isPartiallyActive: false })
         .select("-__v")
         .skip(skip)
         .limit(limit)
@@ -193,7 +193,7 @@ export const getActiveTMCTarget = async (_, res, next) => {
 
 export const startNextGame = async (_, res, next) => {
   try {
-    await startNextGameService(TMCTarget, res, next);
+    await startNextGameService(TMCTarget, res, next, "TMC");
   }
 
   catch (error) {
