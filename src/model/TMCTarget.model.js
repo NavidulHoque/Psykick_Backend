@@ -36,7 +36,7 @@ const TMCTargetSchema = new Schema(
     isCompleted: {
       type: Boolean,
       default: false
-    },
+    }
   },
   { timestamps: true }
 )
